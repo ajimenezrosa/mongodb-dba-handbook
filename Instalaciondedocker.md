@@ -124,7 +124,7 @@ Active:
 
 ### Referencia Visual
 
-![Docker WSL2](https://docs.docker.com/desktop/settings/images/wsl.png)
+![Docker WSL2](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR9f35bG5yUpU9iUhiF4T1J5JqZzorURyaBpr50eBu7vJiw8-62FT43I4&s=10)
 
 ---
 
@@ -176,7 +176,7 @@ https://www.docker.com/products/docker-desktop/
 
 ### Referencia Visual
 
-![Hyper-V](https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/images/hyper-v-manager.png)
+![Hyper-V](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQodvSJ8uCakx1A4Rqde9_c7BASXFNnXBCxNnBmielPYA&s=10)
 
 ---
 
@@ -226,7 +226,7 @@ softwareupdate --install-rosetta
 
 ### Referencia Visual
 
-![Docker macOS](https://docs.docker.com/desktop/install/mac-install/images/docker-app-drag.png)
+![Docker macOS](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoqB5z_RITmFJPhfSxpFEPRhUrq9KYrqaB1cz0gbYfgQ&s=10)
 
 ---
 
