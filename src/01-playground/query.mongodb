@@ -1,0 +1,8 @@
+use("sample_airbnb")
+
+// query parqa mongo
+db.listingsAndReviews.find({property_type: "Apartment" })
+
+
+//query count en mongo 
+db.listingsAndReviews.find({property_type: "Apartment" }).count()
