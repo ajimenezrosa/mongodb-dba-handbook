@@ -1,6 +1,41 @@
+
+# Instalación de Docker en Windows, macOS y Ubuntu
+
+<p align="center">
+  <img src="https://locusit.se/wp-content/uploads/2024/08/MongoDB.png"
+       alt="MongoDB y Docker"
+       width="600">
+</p>
+
+<p align="center">
+<b>Guía de instalación de Docker Desktop y Docker Engine para entornos de desarrollo con MongoDB</b><br>
+Windows • macOS • Ubuntu • Linux
+</p>
+
+---
+
+## Descripción
+
+Docker es una plataforma que permite crear, distribuir y ejecutar aplicaciones en contenedores. En el ecosistema MongoDB, Docker simplifica la creación de entornos de desarrollo, laboratorios, pruebas y despliegues consistentes entre diferentes sistemas operativos.
+
+### Beneficios de utilizar Docker con MongoDB
+
+- Despliegue rápido de instancias MongoDB.
+- Ambientes reproducibles para desarrollo y pruebas.
+- Fácil administración de versiones.
+- Integración con Docker Compose.
+- Portabilidad entre Windows, macOS y Linux.
+- Aislamiento de servicios y dependencias.
+
+---
+
+
+<!-- 
 # Instalación de Docker en Windows, macOS y Ubuntu
 
 > Guía de instalación de Docker Desktop y Docker Engine para entornos de desarrollo con MongoDB, contenedores y aplicaciones modernas.
+
+ -->
 
 ---
 
