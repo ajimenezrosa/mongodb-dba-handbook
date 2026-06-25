@@ -321,7 +321,7 @@ sudo docker run hello-world
 
 ---
 
-### Referencia Visual
+<!-- ### Referencia Visual -->
 
 ![Docker Ubuntu](https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png)
 
@@ -453,3 +453,6 @@ Docker proporciona una plataforma uniforme para ejecutar aplicaciones mediante c
 * Ubuntu/Linux: Docker Engine
 
 Una vez instalado correctamente, Docker estará listo para utilizarse con MongoDB, PostgreSQL, SQL Server, Redis, NGINX y cualquier otro servicio basado en contenedores.
+
+
+[PAGINA DE DOCKERS](https://platzi.com/cursos/mongodb/correr-mongodb-en-docker-configuracion-y/)
