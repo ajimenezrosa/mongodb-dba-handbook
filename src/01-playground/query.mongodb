@@ -1,37 +1,84 @@
-use("sample_training")
+use("platzi_store")
 
+// db.inventory.drop()
 
-// ESTO ACTUALIZA EL CAMPO
-// db.books.updateMany(
-//     {
-//         price: 45
+// db.inventory.insertMany([
+
+// {
+//     _id:1,
+//     item:{
+//         name:"Laptop",
+//         code:"LP100",
+//         description:"Gaming Laptop"
 //     },
-//     {
-//         $set: {
-//             publisher: "LeanPub"
-//         }
-//     }
-// )
+//     quantity:15,
+//     tags:[
+//         "electronics",
+//         "computer",
+//         "office"
+//     ]
+// },
 
-// // ESTOY INSERTA EL CAMPO AUN NO EXISTE
-// db.books.updateMany(
-//     //query
-//     {price: 45},
-//     {
-//         $set: {
-//             publisher1: "LeanPub"
-//         }
-//     }
-// )
+// {
+//     _id:2,
+//     item:{
+//         name:"Headphones",
+//         code:"HP200",
+//         description:"Wireless"
+//     },
+//     quantity:50,
+//     tags:[
+//         "electronics",
+//         "audio",
+//         "music"
+//     ]
+// },
+
+// {
+//     _id:3,
+//     item:{
+//         name:"Notebook",
+//         code:"NB300",
+//         description:"School Notebook"
+//     },
+//     quantity:100,
+//     tags:[
+//         "school",
+//         "book",
+//         "office"
+//     ]
+// },
+
+// {
+//     _id:4,
+//     item:{
+//         name:"Tablet",
+//         code:"TB400",
+//         description:"Android Tablet"
+//     },
+//     quantity:30,
+//     tags:[
+//         "electronics",
+//         "school",
+//         "book"
+//     ]
+// },
+
+// {
+//     _id:5,
+//     item:{
+//         name:"Microwave",
+//         code:"MW500",
+//         description:"Kitchen Appliance"
+//     },
+//     quantity:12,
+//     tags:[
+//         "appliance",
+//         "kitchen",
+//         "home"
+//     ]
+// }
+
+// ])
 
 
-// ESTOY ELIMINA EL CAMPO AUN NO EXISTE
-db.books.updateMany(
-    //query
-    {price: 45},
-    {
-        $unset: {
-            publisher1: "LeanPub"
-        }
-    }
-)
