@@ -1,0 +1,41 @@
+use("sample_training")
+
+
+db.orders.insertMany([
+
+{
+_id:1,
+student_id:1,
+order_date:new Date(),
+products:[
+    {product_id:1,qty:1},
+    {product_id:4,qty:2}
+],
+status:"Completed",
+total:1380
+},
+
+{
+_id:2,
+student_id:2,
+order_date:new Date(),
+products:[
+    {product_id:2,qty:1}
+],
+status:"Pending",
+total:1100
+},
+
+{
+_id:3,
+student_id:3,
+order_date:new Date(),
+products:[
+    {product_id:3,qty:1},
+    {product_id:5,qty:1}
+],
+status:"Completed",
+total:1010
+}
+
+])

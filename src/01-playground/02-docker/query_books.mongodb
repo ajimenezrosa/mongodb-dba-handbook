@@ -1,0 +1,32 @@
+use("sample_training")
+
+db.books.insertMany([
+
+{
+title:"MongoDB in Action",
+pages:420,
+price:50,
+authors:["Kyle Banker"],
+publisher:"Manning",
+year:2023
+},
+
+{
+title:"Learning Python",
+pages:1600,
+price:70,
+authors:["Mark Lutz"],
+publisher:"O'Reilly",
+year:2022
+},
+
+{
+title:"Docker Deep Dive",
+pages:380,
+price:45,
+authors:["Nigel Poulton"],
+publisher:"LeanPub",
+year:2024
+}
+
+])

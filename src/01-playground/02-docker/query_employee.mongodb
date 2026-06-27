@@ -1,0 +1,32 @@
+use("sample_training")
+
+db.employees.insertMany([
+
+{
+_id:1,
+name:"Robert Brown",
+department:"IT",
+salary:5500,
+skills:["MongoDB","Linux","Docker"],
+hireDate:new Date("2020-01-12")
+},
+
+{
+_id:2,
+name:"Laura Green",
+department:"HR",
+salary:3800,
+skills:["Recruitment"],
+hireDate:new Date("2019-10-01")
+},
+
+{
+_id:3,
+name:"Kevin White",
+department:"IT",
+salary:7200,
+skills:["AWS","MongoDB","Python"],
+hireDate:new Date("2018-05-20")
+}
+
+])

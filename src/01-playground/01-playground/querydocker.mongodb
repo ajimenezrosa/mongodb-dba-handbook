@@ -1,0 +1,9 @@
+use("VacaApp")
+
+
+
+
+
+db.Places.find({
+  "events.city": "Miami"
+})
