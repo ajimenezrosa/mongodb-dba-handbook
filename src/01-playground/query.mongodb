@@ -1,77 +1,37 @@
-
 use("sample_training")
 
 
-db.students.insertMany([
+// ESTO ACTUALIZA EL CAMPO
+// db.books.updateMany(
+//     {
+//         price: 45
+//     },
+//     {
+//         $set: {
+//             publisher: "LeanPub"
+//         }
+//     }
+// )
 
-{
-    _id:1,
-    first_name:"John",
-    last_name:"Smith",
-    age:22,
-    gender:"Male",
-    email:"john@email.com",
-    city:"New York",
-    country:"USA",
-    courses:["MongoDB","Python","Java"],
-    grades:[
-        {course:"MongoDB",score:95},
-        {course:"Python",score:88},
-        {course:"Java",score:90}
-    ],
-    active:true
-},
+// // ESTOY INSERTA EL CAMPO AUN NO EXISTE
+// db.books.updateMany(
+//     //query
+//     {price: 45},
+//     {
+//         $set: {
+//             publisher1: "LeanPub"
+//         }
+//     }
+// )
 
-{
-    _id:2,
-    first_name:"Maria",
-    last_name:"Lopez",
-    age:25,
-    gender:"Female",
-    email:"maria@email.com",
-    city:"Miami",
-    country:"USA",
-    courses:["NodeJS","MongoDB"],
-    grades:[
-        {course:"NodeJS",score:98},
-        {course:"MongoDB",score:97}
-    ],
-    active:true
-},
 
-{
-    _id:3,
-    first_name:"Pedro",
-    last_name:"Garcia",
-    age:31,
-    gender:"Male",
-    email:"pedro@email.com",
-    city:"Santo Domingo",
-    country:"Dominican Republic",
-    courses:["SQL","MongoDB"],
-    grades:[
-        {course:"SQL",score:81},
-        {course:"MongoDB",score:78}
-    ],
-    active:false
-},
-
-{
-    _id:4,
-    first_name:"Ana",
-    last_name:"Martinez",
-    age:28,
-    gender:"Female",
-    email:"ana@email.com",
-    city:"Madrid",
-    country:"Spain",
-    courses:["Python","Docker","MongoDB"],
-    grades:[
-        {course:"Python",score:99},
-        {course:"Docker",score:90},
-        {course:"MongoDB",score:92}
-    ],
-    active:true
-}
-
-])
+// ESTOY ELIMINA EL CAMPO AUN NO EXISTE
+db.books.updateMany(
+    //query
+    {price: 45},
+    {
+        $unset: {
+            publisher1: "LeanPub"
+        }
+    }
+)
