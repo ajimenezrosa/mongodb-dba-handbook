@@ -1,0 +1,29 @@
+use("platzi_store")
+
+
+// db.inventory.find()
+
+// db.inventory.find({ "item.description": "ingle line description." })
+
+// todos los documentos que tienen line dentro se optiene de esta forma.
+//db.inventory.find({  "item.description": { $regex: /line/ }})
+
+//SI QUEREMOS QUE NO DISCRIMINE ENTRE MAYUSCULAS Y NINUSCULAS COLOCAMOS UNA
+//i AL FINAL DE EXPRESION REGULAR
+// db.inventory.find(  { "item.description": {$regrex: /LINE/i}} )
+
+//hacer busqueda de los que terminen en una palabra.
+// db.inventory.find( { "item.description": { $regex: /line$/i} })
+
+
+// buscaremos un texto que inicie en algo
+// db.inventory.find( { "item.description": {$regex: /^single/i} })
+
+
+
+//como manejar los saltos de linea.  en los documentos.
+// para buscar en estos documentos se realizara con una 'm' de multi line para 
+// que busque en multiples lineas de los documentos. encaso que se tenga saltos
+// de linea
+db.inventory.find( { "item.description": {$regex: /^s/im} })
+
