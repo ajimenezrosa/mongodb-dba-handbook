@@ -1,0 +1,478 @@
+# 🔍 Búsquedas Avanzadas con Expresiones Regulares (Regex) en MongoDB
+
+Las expresiones regulares (**Regular Expressions** o **Regex**) permiten realizar búsquedas avanzadas sobre campos de texto utilizando patrones.
+
+Son especialmente útiles cuando necesitas buscar palabras, frases, prefijos, sufijos o realizar búsquedas sin importar si las letras están en mayúsculas o minúsculas.
+
+---
+
+# ¿Qué es Regex?
+
+Una expresión regular es un patrón que permite encontrar coincidencias dentro de un texto.
+
+En MongoDB, Regex se utiliza principalmente para realizar búsquedas sobre campos de tipo **String**.
+
+Ejemplo:
+
+```javascript
+{
+    "item.description": /line/
+}
+```
+
+Esta consulta busca todos los documentos cuya descripción contenga la palabra **line**.
+
+---
+
+# Dataset de ejemplo
+
+```javascript
+db.inventory.drop()
+
+db.inventory.insertMany([
+{
+    item:{
+        name:"Laptop",
+        code:"100",
+        description:"High performance laptop for developers"
+    },
+    quantity:20,
+    price:1200
+},
+{
+    item:{
+        name:"Mouse",
+        code:"101",
+        description:"Wireless optical mouse"
+    },
+    quantity:80,
+    price:25
+},
+{
+    item:{
+        name:"Keyboard",
+        code:"102",
+        description:"Mechanical keyboard with RGB lighting"
+    },
+    quantity:45,
+    price:90
+},
+{
+    item:{
+        name:"Monitor",
+        code:"103",
+        description:"Ultra Wide Monitor 34 inches"
+    },
+    quantity:15,
+    price:450
+},
+{
+    item:{
+        name:"Printer",
+        code:"104",
+        description:"Single line laser printer"
+    },
+    quantity:12,
+    price:220
+}
+])
+```
+
+---
+
+# Buscar una palabra
+
+Buscar documentos cuya descripción contenga la palabra **line**.
+
+```javascript
+db.inventory.find({
+    "item.description": /line/
+})
+```
+
+Resultado:
+
+```text
+Single line laser printer
+```
+
+---
+
+# Ignorar mayúsculas y minúsculas
+
+Utilizando la opción **i** (Insensitive).
+
+```javascript
+db.inventory.find({
+    "item.description": /LINE/i
+})
+```
+
+También encontrará:
+
+```text
+Single line laser printer
+```
+
+Porque la búsqueda no diferencia entre:
+
+* line
+* LINE
+* Line
+* LiNe
+
+---
+
+# Buscar textos que comiencen con una palabra
+
+El símbolo **^** indica el inicio del texto.
+
+Buscar descripciones que comiencen con **High**.
+
+```javascript
+db.inventory.find({
+    "item.description": /^High/
+})
+```
+
+Resultado:
+
+```text
+High performance laptop for developers
+```
+
+---
+
+## Ignorando mayúsculas
+
+```javascript
+db.inventory.find({
+    "item.description": /^high/i
+})
+```
+
+---
+
+# Buscar textos que terminen con una palabra
+
+El símbolo **$** representa el final del texto.
+
+Buscar descripciones que terminen con **developers**.
+
+```javascript
+db.inventory.find({
+    "item.description": /developers$/
+})
+```
+
+Resultado:
+
+```text
+High performance laptop for developers
+```
+
+---
+
+# Buscar cualquier palabra que contenga "wire"
+
+```javascript
+db.inventory.find({
+    "item.description": /wire/i
+})
+```
+
+Resultado:
+
+```text
+Wireless optical mouse
+```
+
+---
+
+# Buscar cualquier palabra que contenga "board"
+
+```javascript
+db.inventory.find({
+    "item.description": /board/i
+})
+```
+
+Resultado:
+
+```text
+Mechanical keyboard with RGB lighting
+```
+
+---
+
+# Buscar múltiples líneas
+
+Si el texto contiene saltos de línea puedes utilizar la opción **m**.
+
+Documento de ejemplo:
+
+```javascript
+{
+    description:
+`First Line
+Second Line
+Third Line`
+}
+```
+
+Consulta:
+
+```javascript
+db.inventory.find({
+    description:/^Second/m
+})
+```
+
+El modificador **m** hace que el símbolo **^** funcione al inicio de cada línea.
+
+---
+
+# Buscar utilizando el operador `$regex`
+
+Regex también puede escribirse utilizando el operador `$regex`.
+
+```javascript
+db.inventory.find({
+    "item.description":{
+        $regex:"line"
+    }
+})
+```
+
+Es equivalente a:
+
+```javascript
+db.inventory.find({
+    "item.description":/line/
+})
+```
+
+---
+
+# `$regex` con opciones
+
+```javascript
+db.inventory.find({
+    "item.description":{
+        $regex:"line",
+        $options:"i"
+    }
+})
+```
+
+El parámetro **i** indica que la búsqueda es insensible a mayúsculas.
+
+---
+
+# Buscar nombres que comiencen con "M"
+
+```javascript
+db.inventory.find({
+    "item.name":/^M/
+})
+```
+
+Resultado:
+
+```text
+Mouse
+Monitor
+```
+
+---
+
+# Buscar nombres que terminen en "r"
+
+```javascript
+db.inventory.find({
+    "item.name":/r$/
+})
+```
+
+Resultado:
+
+```text
+Monitor
+Printer
+```
+
+---
+
+# Buscar cualquier nombre que contenga "to"
+
+```javascript
+db.inventory.find({
+    "item.name":/to/i
+})
+```
+
+Resultado:
+
+```text
+Laptop
+Monitor
+```
+
+---
+
+# Combinar Regex con otros filtros
+
+Buscar productos cuya descripción contenga **laser** y cuyo precio sea menor a 300.
+
+```javascript
+db.inventory.find({
+    "item.description":/laser/i,
+    price:{
+        $lt:300
+    }
+})
+```
+
+Resultado:
+
+```text
+Printer
+```
+
+---
+
+# Regex + Operadores de Comparación
+
+Buscar productos cuyo nombre comience con **M** y cuya cantidad sea mayor a 20.
+
+```javascript
+db.inventory.find({
+    "item.name":/^M/,
+    quantity:{
+        $gt:20
+    }
+})
+```
+
+Resultado:
+
+```text
+Mouse
+```
+
+---
+
+# Caracteres especiales más utilizados
+
+| Expresión | Significado                        |
+| --------- | ---------------------------------- |
+| `^`       | Inicio del texto                   |
+| `$`       | Final del texto                    |
+| `.`       | Cualquier carácter                 |
+| `*`       | Cero o más repeticiones            |
+| `+`       | Una o más repeticiones             |
+| `?`       | Hace opcional el carácter anterior |
+| `[]`      | Conjunto de caracteres             |
+| `[^ ]`    | Negación de un conjunto            |
+| `\d`      | Dígitos                            |
+| `\w`      | Letras y números                   |
+| `\s`      | Espacios en blanco                 |
+
+---
+
+# Ejemplos prácticos
+
+## Productos cuyo nombre empiece por P
+
+```javascript
+db.inventory.find({
+    "item.name":/^P/
+})
+```
+
+---
+
+## Productos cuya descripción termine con "mouse"
+
+```javascript
+db.inventory.find({
+    "item.description":/mouse$/i
+})
+```
+
+---
+
+## Productos que contengan la palabra "RGB"
+
+```javascript
+db.inventory.find({
+    "item.description":/RGB/i
+})
+```
+
+---
+
+## Productos cuyo código comience por 10
+
+```javascript
+db.inventory.find({
+    "item.code":/^10/
+})
+```
+
+---
+
+## Productos cuyo nombre tenga la letra "o"
+
+```javascript
+db.inventory.find({
+    "item.name":/o/i
+})
+```
+
+---
+
+# MongoDB Atlas Search
+
+Aunque las expresiones regulares son muy útiles, MongoDB ofrece una solución más avanzada llamada **MongoDB Atlas Search**, diseñada para búsquedas de texto completo (*Full-Text Search*).
+
+Entre sus características destacan:
+
+* Búsqueda inteligente de texto.
+* Corrección de errores ortográficos.
+* Uso de sinónimos.
+* Relevancia de resultados.
+* Autocompletado.
+* Integración con Inteligencia Artificial.
+* Alto rendimiento en grandes volúmenes de datos.
+
+Atlas Search es ideal para aplicaciones que requieren motores de búsqueda similares a Google dentro de MongoDB.
+
+---
+
+# Buenas prácticas
+
+* Utiliza Regex únicamente cuando sea necesario.
+* Evita expresiones que comiencen con `.*`, ya que impiden el uso eficiente de índices.
+* Usa el modificador **i** cuando no importe la diferencia entre mayúsculas y minúsculas.
+* Combina Regex con otros filtros para reducir el número de documentos analizados.
+* Para búsquedas complejas y de gran volumen, considera utilizar **MongoDB Atlas Search**.
+
+---
+
+# Resumen
+
+Las expresiones regulares permiten realizar búsquedas avanzadas sobre campos de texto en MongoDB.
+
+Los elementos más utilizados son:
+
+| Expresión       | Descripción                                 |
+| --------------- | ------------------------------------------- |
+| `/texto/`       | Contiene el texto                           |
+| `/texto/i`      | Contiene el texto sin distinguir mayúsculas |
+| `/^texto/`      | Comienza con el texto                       |
+| `/texto$/`      | Termina con el texto                        |
+| `$regex`        | Sintaxis alternativa para Regex             |
+| `$options: "i"` | Ignora mayúsculas y minúsculas              |
+
+Regex es una herramienta muy poderosa para consultas flexibles y, combinada con otros operadores de MongoDB, permite construir filtros altamente precisos y eficientes.

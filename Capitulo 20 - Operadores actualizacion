@@ -1,0 +1,327 @@
+# Actualización de Datos con Operadores en MongoDB
+
+MongoDB permite actualizar documentos utilizando operadores especiales. Estos operadores ayudan a modificar campos, trabajar con arreglos, incrementar valores, eliminar elementos y actualizar múltiples documentos de forma eficiente.
+
+---
+
+## ¿Qué son los operadores de actualización?
+
+Los operadores de actualización son instrucciones que indican a MongoDB qué cambio debe realizar sobre uno o varios documentos.
+
+Algunos operadores comunes son:
+
+| Operador    | Uso                                            |
+| ----------- | ---------------------------------------------- |
+| `$set`      | Modifica o crea un campo                       |
+| `$unset`    | Elimina un campo                               |
+| `$inc`      | Incrementa o disminuye un valor numérico       |
+| `$push`     | Agrega un elemento a un array                  |
+| `$pull`     | Elimina elementos de un array                  |
+| `$addToSet` | Agrega un valor a un array evitando duplicados |
+
+---
+
+## Dataset de ejemplo
+
+```javascript
+db.sensors.insertMany([
+  {
+    sensor_id: "A001",
+    location: "Santo Domingo",
+    status: "active",
+    readings: [1, 2, 3, 4, 5]
+  },
+  {
+    sensor_id: "A002",
+    location: "Santiago",
+    status: "active",
+    readings: [2, 3, 6, 7]
+  },
+  {
+    sensor_id: "A001",
+    location: "La Vega",
+    status: "inactive",
+    readings: [1, 3, 5, 8]
+  }
+])
+```
+
+---
+
+## Actualizar un documento con `$set`
+
+```javascript
+db.sensors.updateOne(
+  { sensor_id: "A001" },
+  {
+    $set: {
+      status: "maintenance"
+    }
+  }
+)
+```
+
+Este comando actualiza el primer documento que tenga `sensor_id` igual a `"A001"`.
+
+---
+
+## Actualizar varios documentos con `updateMany`
+
+```javascript
+db.sensors.updateMany(
+  { sensor_id: "A001" },
+  {
+    $set: {
+      status: "review"
+    }
+  }
+)
+```
+
+Este comando actualiza todos los documentos cuyo `sensor_id` sea `"A001"`.
+
+---
+
+## Eliminar elementos de un array con `$pull`
+
+```javascript
+db.sensors.updateMany(
+  { sensor_id: "A001" },
+  {
+    $pull: {
+      readings: { $gte: 3 }
+    }
+  }
+)
+```
+
+Este comando elimina del array `readings` todos los valores mayores o iguales a `3`.
+
+Antes:
+
+```javascript
+readings: [1, 2, 3, 4, 5]
+```
+
+Después:
+
+```javascript
+readings: [1, 2]
+```
+
+---
+
+## Agregar elementos a un array con `$push`
+
+```javascript
+db.sensors.updateOne(
+  { sensor_id: "A002" },
+  {
+    $push: {
+      readings: 10
+    }
+  }
+)
+```
+
+Resultado:
+
+```javascript
+readings: [2, 3, 6, 7, 10]
+```
+
+---
+
+## Agregar sin duplicar con `$addToSet`
+
+```javascript
+db.sensors.updateOne(
+  { sensor_id: "A002" },
+  {
+    $addToSet: {
+      readings: 7
+    }
+  }
+)
+```
+
+Como el valor `7` ya existe en el array, MongoDB no lo vuelve a insertar.
+
+---
+
+## Incrementar valores con `$inc`
+
+```javascript
+db.products.updateMany(
+  { category: "electronics" },
+  {
+    $inc: {
+      stock: 5
+    }
+  }
+)
+```
+
+Este comando aumenta en `5` el valor del campo `stock`.
+
+Para disminuir:
+
+```javascript
+db.products.updateMany(
+  { category: "electronics" },
+  {
+    $inc: {
+      stock: -2
+    }
+  }
+)
+```
+
+---
+
+# Consultas avanzadas en MongoDB Compass
+
+En MongoDB Compass puedes escribir filtros usando formato JSON.
+
+## Filtrar viajes con duración menor o igual a 200 segundos
+
+```javascript
+{
+  trip_duration: { $lte: 200 }
+}
+```
+
+---
+
+## Filtrar viajes cortos de usuarios suscritos
+
+```javascript
+{
+  trip_duration: { $lte: 200 },
+  user_type: "subscriber"
+}
+```
+
+Esta consulta devuelve documentos donde:
+
+* `trip_duration` sea menor o igual a `200`.
+* `user_type` sea igual a `"subscriber"`.
+
+---
+
+## Usar filtros combinados
+
+```javascript
+{
+  trip_duration: { $gte: 100, $lte: 200 },
+  user_type: "subscriber"
+}
+```
+
+Esta consulta busca viajes de usuarios suscritos cuya duración esté entre `100` y `200` segundos.
+
+---
+
+# Diferencia entre consulta y actualización
+
+## Consulta
+
+Sirve para buscar documentos.
+
+```javascript
+db.trips.find({
+  trip_duration: { $lte: 200 }
+})
+```
+
+---
+
+## Actualización
+
+Sirve para modificar documentos.
+
+```javascript
+db.trips.updateMany(
+  { trip_duration: { $lte: 200 } },
+  {
+    $set: {
+      short_trip: true
+    }
+  }
+)
+```
+
+---
+
+# Ejemplos prácticos
+
+## Marcar viajes cortos
+
+```javascript
+db.trips.updateMany(
+  { trip_duration: { $lte: 200 } },
+  {
+    $set: {
+      trip_type: "short"
+    }
+  }
+)
+```
+
+---
+
+## Marcar usuarios suscriptores
+
+```javascript
+db.trips.updateMany(
+  { user_type: "subscriber" },
+  {
+    $set: {
+      customer_type: "frequent"
+    }
+  }
+)
+```
+
+---
+
+## Eliminar lecturas altas de sensores
+
+```javascript
+db.sensors.updateMany(
+  { sensor_id: "A001" },
+  {
+    $pull: {
+      readings: { $gte: 3 }
+    }
+  }
+)
+```
+
+---
+
+# Buenas prácticas
+
+* Antes de usar `updateMany`, prueba primero el filtro con `find`.
+* Usa `$set` para modificar campos específicos.
+* Evita actualizar documentos sin filtro.
+* Haz backup si trabajarás sobre datos importantes.
+* Valida los cambios después de ejecutar una actualización.
+* Usa MongoDB Compass para revisar visualmente los documentos modificados.
+
+---
+
+# Resumen
+
+Los operadores de actualización permiten modificar documentos de manera controlada y eficiente.
+
+| Operador    | Función                         |
+| ----------- | ------------------------------- |
+| `$set`      | Actualiza o crea campos         |
+| `$unset`    | Elimina campos                  |
+| `$inc`      | Incrementa o reduce números     |
+| `$push`     | Agrega elementos a arrays       |
+| `$pull`     | Elimina elementos de arrays     |
+| `$addToSet` | Agrega elementos sin duplicados |
+
+MongoDB permite combinar filtros y operadores para ejecutar actualizaciones precisas sobre uno o varios documentos.
