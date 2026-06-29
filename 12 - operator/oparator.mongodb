@@ -1,0 +1,26 @@
+use("platzi_store")
+
+// using $gt (>) & $gte (<=)
+
+// mayor que
+// db.inventory.find({ qty: {$gt: 20}})
+// mayor o igual
+// db.inventory.find({ qty: {$gte: 20}})
+
+
+//using Slt < and lte <=
+// db.inventory.find({qty: {$lt: 20}})
+
+
+// db.inventory.find({qty: {$lte: 20}})
+
+// join
+// db.inventory.find({qty: {$gte:20 , $lte: 25}})
+
+// db.inventory.find({
+//     "item.name": "ab",
+//     qty: {$gte:20 , $lte: 25}})
+
+db.inventory.find({
+    "item.code": "123",
+    qty: {$gte:20 , $lte: 25}})    
