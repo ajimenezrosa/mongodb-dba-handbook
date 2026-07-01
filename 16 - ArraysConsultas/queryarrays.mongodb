@@ -1,0 +1,38 @@
+use("platzi_store")
+
+
+// $in, values & arrays
+// db.inventory.find({ qty: {$in: [20,25]}})
+
+// buscar dentro del Arrays tags, donde sean iguales a book y electrinic.
+// db.inventory.find( {tags: {$in: ["book", "electronics"]}})
+
+// buscar que no esten dentro del 
+// Arrays tags, donde sean iguales a book y electrinic.
+// utilizamos $nin
+// db.inventory.find( {tags: {$nin: ["book", "electronics"]}})
+
+
+
+// Estos operadores solo funcionan para Arrays.
+//
+// esto me trae en donde aparezca book
+// db.inventory.find({tags: "book"})
+
+//Esto me trae en donde esten los dos School y Book
+//pero tienen que ser exacto , la misma posicion
+//es strictamente en esa posicion.
+//db.inventory.find({tags: ["school", "book"]})
+
+// arrays
+//esto funcion como un or,no importa el orden pero que los tenga ambos
+// book y school
+// db.inventory.find({ tags: {$all: ["book", "school"]} })
+
+//$size buscar los que tengan un size de 2, es decir 2 elementos.
+// db.inventory.find( { tags: {$size: 2}})
+
+// $elemMatch select los elementos que dentro del array tienen un valor x
+// db.survery.find({ results: { $elemMatch: {products: "xyz"}}  })
+
+db.survery.find()

@@ -1,0 +1,520 @@
+# Consultas en Arrays en MongoDB
+
+Los **Arrays** son uno de los tipos de datos más utilizados en MongoDB. Existen operadores especializados para buscar elementos dentro de ellos.
+
+## Operadores que aprenderás
+
+* `$in`
+* `$nin`
+* `$all`
+* `$size`
+* `$elemMatch`
+
+---
+
+# 1. Operador `$in`
+
+Permite buscar documentos cuyo campo tenga **uno de varios valores**.
+
+## Sintaxis
+
+```javascript
+db.coleccion.find({
+    campo: {
+        $in: [valor1, valor2, valor3]
+    }
+})
+```
+
+---
+
+## Ejemplo
+
+Colección:
+
+```json
+{
+    "producto": "Laptop",
+    "cantidad": 20
+}
+```
+
+```json
+{
+    "producto": "Monitor",
+    "cantidad": 30
+}
+```
+
+Consulta
+
+```javascript
+db.inventory.find({
+    cantidad: {
+        $in: [20,30]
+    }
+})
+```
+
+Resultado
+
+Devuelve
+
+* Laptop
+* Monitor
+
+---
+
+## También funciona con Arrays
+
+Documento
+
+```json
+{
+    "nombre":"Alejandro",
+    "habilidades":[
+        "SQL",
+        "MongoDB",
+        "Python"
+    ]
+}
+```
+
+Consulta
+
+```javascript
+db.empleados.find({
+    habilidades:{
+        $in:["MongoDB"]
+    }
+})
+```
+
+Resultado
+
+Encuentra a Alejandro porque el Array contiene **MongoDB**.
+
+---
+
+# 2. Operador `$nin`
+
+Significa **Not In**.
+
+Busca documentos que **NO** tengan esos valores.
+
+## Sintaxis
+
+```javascript
+db.inventory.find({
+    tags:{
+        $nin:[
+            "book",
+            "electronics"
+        ]
+    }
+})
+```
+
+---
+
+Ejemplo
+
+Documento
+
+```json
+{
+    "producto":"Cuaderno",
+    "tags":[
+        "school",
+        "paper"
+    ]
+}
+```
+
+Consulta
+
+```javascript
+db.inventory.find({
+    tags:{
+        $nin:[
+            "electronics"
+        ]
+    }
+})
+```
+
+Como el Array no contiene **electronics**, el documento será devuelto.
+
+---
+
+# Diferencia entre `$in` y `$nin`
+
+| Operador | Función                                              |
+| -------- | ---------------------------------------------------- |
+| `$in`    | Busca documentos que contengan alguno de los valores |
+| `$nin`   | Busca documentos que NO contengan esos valores       |
+
+---
+
+# 3. Operador `$all`
+
+Busca documentos cuyos Arrays contengan **todos** los elementos indicados.
+
+No importa el orden.
+
+## Documento
+
+```json
+{
+    "nombre":"Libro",
+    "tags":[
+        "school",
+        "book",
+        "education"
+    ]
+}
+```
+
+Consulta
+
+```javascript
+db.inventory.find({
+    tags:{
+        $all:[
+            "school",
+            "book"
+        ]
+    }
+})
+```
+
+Resultado
+
+Sí devuelve el documento porque contiene ambos valores.
+
+---
+
+Otro documento
+
+```json
+{
+    "tags":[
+        "book"
+    ]
+}
+```
+
+No será encontrado porque falta **school**.
+
+---
+
+# Diferencia entre `$in` y `$all`
+
+### `$in`
+
+Basta con que exista **uno**.
+
+```javascript
+$in:["book","school"]
+```
+
+Devuelve
+
+```
+["book"]
+```
+
+```
+["school"]
+```
+
+```
+["book","school"]
+```
+
+---
+
+### `$all`
+
+Debe contener **todos**.
+
+```javascript
+$all:["book","school"]
+```
+
+Solo devuelve
+
+```
+["book","school"]
+```
+
+---
+
+# 4. Operador `$size`
+
+Busca Arrays con un tamaño específico.
+
+## Documento
+
+```json
+{
+    "tags":[
+        "book",
+        "school"
+    ]
+}
+```
+
+Consulta
+
+```javascript
+db.inventory.find({
+    tags:{
+        $size:2
+    }
+})
+```
+
+Resultado
+
+Solo devuelve documentos cuyo Array tenga exactamente dos elementos.
+
+---
+
+Otro ejemplo
+
+```json
+{
+    "telefonos":[
+        "809...",
+        "829...",
+        "849..."
+    ]
+}
+```
+
+Consulta
+
+```javascript
+db.personas.find({
+    telefonos:{
+        $size:3
+    }
+})
+```
+
+---
+
+# 5. Operador `$elemMatch`
+
+Es el operador más potente para Arrays de objetos.
+
+Permite que varias condiciones se cumplan sobre **el mismo elemento del Array**.
+
+---
+
+Documento
+
+```json
+{
+    "nombre":"Alejandro",
+    "cursos":[
+        {
+            "nombre":"MongoDB",
+            "nota":95
+        },
+        {
+            "nombre":"SQL",
+            "nota":80
+        }
+    ]
+}
+```
+
+Consulta
+
+```javascript
+db.estudiantes.find({
+    cursos:{
+        $elemMatch:{
+            nombre:"MongoDB",
+            nota:{
+                $gte:90
+            }
+        }
+    }
+})
+```
+
+Resultado
+
+Sí encuentra el documento.
+
+Porque existe un mismo objeto que cumple
+
+* nombre MongoDB
+* nota mayor o igual a 90
+
+---
+
+# ¿Por qué usar `$elemMatch`?
+
+Supón este documento
+
+```json
+{
+    "cursos":[
+        {
+            "nombre":"MongoDB",
+            "nota":70
+        },
+        {
+            "nombre":"SQL",
+            "nota":95
+        }
+    ]
+}
+```
+
+Consulta SIN `$elemMatch`
+
+```javascript
+db.estudiantes.find({
+    "cursos.nombre":"MongoDB",
+    "cursos.nota":{
+        $gte:90
+    }
+})
+```
+
+MongoDB podría devolver este documento porque encuentra:
+
+* MongoDB en un objeto
+* nota 95 en otro objeto
+
+No verifica que ambas condiciones pertenezcan al mismo elemento.
+
+---
+
+Con `$elemMatch`
+
+```javascript
+db.estudiantes.find({
+    cursos:{
+        $elemMatch:{
+            nombre:"MongoDB",
+            nota:{
+                $gte:90
+            }
+        }
+    }
+})
+```
+
+Este documento **NO** será devuelto.
+
+Porque ningún objeto cumple ambas condiciones simultáneamente.
+
+---
+
+# Ejemplo completo con inventario
+
+Documento
+
+```json
+{
+    "name":"Kit de Herramientas",
+    "categories":[
+        "Tools",
+        "Hardware",
+        "Workshop"
+    ],
+    "locations":[
+        {
+            "warehouse":"A",
+            "stock":20
+        },
+        {
+            "warehouse":"B",
+            "stock":5
+        }
+    ]
+}
+```
+
+---
+
+Buscar si pertenece a Hardware
+
+```javascript
+db.inventory.find({
+    categories:{
+        $in:["Hardware"]
+    }
+})
+```
+
+---
+
+Buscar que tenga Hardware y Tools
+
+```javascript
+db.inventory.find({
+    categories:{
+        $all:[
+            "Hardware",
+            "Tools"
+        ]
+    }
+})
+```
+
+---
+
+Buscar Arrays de exactamente tres categorías
+
+```javascript
+db.inventory.find({
+    categories:{
+        $size:3
+    }
+})
+```
+
+---
+
+Buscar almacenes con más de 10 unidades
+
+```javascript
+db.inventory.find({
+    locations:{
+        $elemMatch:{
+            warehouse:"A",
+            stock:{
+                $gt:10
+            }
+        }
+    }
+})
+```
+
+---
+
+# Resumen rápido
+
+| Operador     | ¿Qué hace?                                                         | Uso principal            |
+| ------------ | ------------------------------------------------------------------ | ------------------------ |
+| `$in`        | Busca si el campo contiene alguno de los valores indicados         | Valores simples o Arrays |
+| `$nin`       | Excluye documentos que contengan determinados valores              | Valores simples o Arrays |
+| `$all`       | Exige que el Array contenga todos los elementos especificados      | Arrays                   |
+| `$size`      | Filtra Arrays por su cantidad exacta de elementos                  | Arrays                   |
+| `$elemMatch` | Evalúa varias condiciones sobre un mismo objeto dentro de un Array | Arrays de documentos     |
+
+# Puntos clave para el examen
+
+* **`$in`** devuelve documentos que contengan **al menos uno** de los valores especificados.
+* **`$nin`** devuelve documentos que **no contengan** ninguno de los valores indicados.
+* **`$all`** requiere que el Array contenga **todos** los elementos solicitados, sin importar el orden.
+* **`$size`** solo funciona con Arrays y compara su longitud exacta.
+* **`$elemMatch`** es indispensable para Arrays de objetos cuando varias condiciones deben cumplirse en el **mismo elemento** del Array.
+* La diferencia clave entre **`$in`** y **`$all`** es que `$in` requiere una coincidencia de cualquiera de los valores, mientras que `$all` exige la presencia de todos ellos.
