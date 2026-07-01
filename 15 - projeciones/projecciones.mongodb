@@ -1,0 +1,8 @@
+use("platzi_store")
+
+db.iot.find(
+    //query
+    {sensor: {$eq: "A001"}},
+    // projections
+    {sensor:1, date:1}
+)
